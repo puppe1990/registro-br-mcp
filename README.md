@@ -28,7 +28,10 @@ npm install -g registro-br-mcp
 
 ### Claude Desktop
 
-Adicione ao arquivo de configuração (`~/Library/Application Support/Claude/claude_desktop_config.json` no macOS):
+Adicione ao arquivo de configuração:
+
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -43,7 +46,64 @@ Adicione ao arquivo de configuração (`~/Library/Application Support/Claude/cla
 
 ### Claude Code
 
-Adicione ao arquivo `~/.claude/settings.json`:
+Adicione ao arquivo:
+
+- **macOS/Linux**: `~/.claude/settings.json`
+- **Windows**: `%USERPROFILE%\.claude\settings.json`
+
+```json
+{
+  "mcpServers": {
+    "registro-br": {
+      "command": "npx",
+      "args": ["registro-br-mcp"]
+    }
+  }
+}
+```
+
+### Cursor
+
+Adicione ao arquivo de configuração MCP:
+
+- **macOS/Linux**: `~/.cursor/mcp.json`
+- **Windows**: `%USERPROFILE%\.cursor\mcp.json`
+
+```json
+{
+  "mcpServers": {
+    "registro-br": {
+      "command": "npx",
+      "args": ["registro-br-mcp"]
+    }
+  }
+}
+```
+
+### Windsurf
+
+Adicione ao arquivo de configuração MCP:
+
+- **macOS/Linux**: `~/.codeium/windsurf/mcp_config.json`
+- **Windows**: `%USERPROFILE%\.codeium\windsurf\mcp_config.json`
+
+```json
+{
+  "mcpServers": {
+    "registro-br": {
+      "command": "npx",
+      "args": ["registro-br-mcp"]
+    }
+  }
+}
+```
+
+### Antigravity
+
+Adicione ao arquivo de configuração MCP:
+
+- **macOS/Linux**: `~/.antigravity/mcp.json`
+- **Windows**: `%USERPROFILE%\.antigravity\mcp.json`
 
 ```json
 {
