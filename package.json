@@ -1,0 +1,40 @@
+{
+  "name": "registro-br-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server para consultar o RDAP do Registro.br",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "registro-br-mcp": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "rdap",
+    "registro.br",
+    "whois",
+    "domain",
+    "brasil",
+    "brazil"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yvesmariano/registro-br-mcp.git"
+  },
+  "author": "Yves Mariano",
+  "homepage": "https://github.com/yvesmariano/registro-br-mcp#readme"
+}
