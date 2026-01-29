@@ -6,7 +6,30 @@ import { z } from "zod";
 
 const RDAP_BASE_URL = "https://rdap.registro.br";
 
-async function fetchRdap(path) {
+// Cache configuration
+const cache = new Map();
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+function getCacheEntry(path) {
+  const entry = cache.get(path);
+  if (!entry) return null;
+
+  if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
+    cache.delete(path);
+    return null;
+  }
+
+  return entry;
+}
+
+function setCacheEntry(path, data) {
+  cache.set(path, {
+    data,
+    timestamp: Date.now(),
+  });
+}
+
+async function fetchRdapFromApi(path) {
   const url = `${RDAP_BASE_URL}${path}`;
   const response = await fetch(url, {
     headers: {
@@ -22,6 +45,17 @@ async function fetchRdap(path) {
   }
 
   return response.json();
+}
+
+async function fetchRdap(path) {
+  const cached = getCacheEntry(path);
+  if (cached) {
+    return { data: cached.data, fromCache: true };
+  }
+
+  const data = await fetchRdapFromApi(path);
+  setCacheEntry(path, data);
+  return { data, fromCache: false };
 }
 
 function formatDomainInfo(data) {
@@ -194,12 +228,13 @@ server.tool(
   },
   async ({ domain }) => {
     try {
-      const data = await fetchRdap(`/domain/${domain}`);
+      const { data, fromCache } = await fetchRdap(`/domain/${domain}`);
+      const cacheIndicator = fromCache ? " (cached)" : "";
       return {
         content: [
           {
             type: "text",
-            text: formatDomainInfo(data),
+            text: formatDomainInfo(data) + cacheIndicator,
           },
           {
             type: "text",
@@ -230,12 +265,13 @@ server.tool(
   },
   async ({ entity }) => {
     try {
-      const data = await fetchRdap(`/entity/${entity}`);
+      const { data, fromCache } = await fetchRdap(`/entity/${entity}`);
+      const cacheIndicator = fromCache ? " (cached)" : "";
       return {
         content: [
           {
             type: "text",
-            text: formatEntityInfo(data),
+            text: formatEntityInfo(data) + cacheIndicator,
           },
           {
             type: "text",
@@ -266,12 +302,13 @@ server.tool(
   },
   async ({ nameserver }) => {
     try {
-      const data = await fetchRdap(`/nameserver/${nameserver}`);
+      const { data, fromCache } = await fetchRdap(`/nameserver/${nameserver}`);
+      const cacheIndicator = fromCache ? " (cached)" : "";
       return {
         content: [
           {
             type: "text",
-            text: formatNameserverInfo(data),
+            text: formatNameserverInfo(data) + cacheIndicator,
           },
           {
             type: "text",
@@ -302,12 +339,13 @@ server.tool(
   },
   async ({ ip }) => {
     try {
-      const data = await fetchRdap(`/ip/${ip}`);
+      const { data, fromCache } = await fetchRdap(`/ip/${ip}`);
+      const cacheIndicator = fromCache ? " (cached)" : "";
       return {
         content: [
           {
             type: "text",
-            text: formatIpInfo(data),
+            text: formatIpInfo(data) + cacheIndicator,
           },
           {
             type: "text",
@@ -339,12 +377,13 @@ server.tool(
   async ({ asn }) => {
     try {
       const asnNumber = asn.replace(/^AS/i, "");
-      const data = await fetchRdap(`/autnum/${asnNumber}`);
+      const { data, fromCache } = await fetchRdap(`/autnum/${asnNumber}`);
+      const cacheIndicator = fromCache ? " (cached)" : "";
       return {
         content: [
           {
             type: "text",
-            text: formatAsnInfo(data),
+            text: formatAsnInfo(data) + cacheIndicator,
           },
           {
             type: "text",
