@@ -57,7 +57,12 @@ try {
 
   console.log(`\n--- rdap_domain ${domain} ---\n${text}`);
 
-  if (call.result?.isError) {
+  const dns = await request("tools/call", { name: "dns_lookup", arguments: { name: domain } });
+  const dnsText = dns.result?.content?.[0]?.text ?? JSON.stringify(dns, null, 2);
+
+  console.log(`\n--- dns_lookup ${domain} (A) ---\n${dnsText}`);
+
+  if (call.result?.isError || dns.result?.isError) {
     process.exitCode = 1;
   }
 } finally {

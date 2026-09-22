@@ -107,26 +107,6 @@ export function formatEntityInfo(data) {
   return lines.join("\n");
 }
 
-export function formatNameserverInfo(data) {
-  const lines = [];
-
-  lines.push(`Nameserver: ${data.ldhName}`);
-  lines.push(`Handle: ${data.handle || "N/A"}`);
-
-  if (data.ipAddresses) {
-    if (data.ipAddresses.v4) {
-      lines.push(`IPv4: ${data.ipAddresses.v4.join(", ")}`);
-    }
-    if (data.ipAddresses.v6) {
-      lines.push(`IPv6: ${data.ipAddresses.v6.join(", ")}`);
-    }
-  }
-
-  pushEvents(lines, data);
-
-  return lines.join("\n");
-}
-
 export function formatIpInfo(data) {
   const lines = [];
 

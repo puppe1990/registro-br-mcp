@@ -4,13 +4,17 @@ Um servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) par
 
 ## Ferramentas Disponíveis
 
-| Ferramenta        | Descrição                                                                |
-| ----------------- | ------------------------------------------------------------------------ |
-| `rdap_domain`     | Consulta informações de domínios .br (ex: `nic.br`, `registro.br`)       |
-| `rdap_entity`     | Consulta entidades por CNPJ, CPF ou handle (ex: `05506560000136`, `FAN`) |
-| `rdap_nameserver` | Consulta informações de nameservers (ex: `a.dns.br`)                     |
-| `rdap_ip`         | Consulta informações de IP ou rede (ex: `200.160.0.0`, `200.160.0.0/20`) |
-| `rdap_asn`        | Consulta Autonomous System Numbers (ex: `22548`, `AS22548`)              |
+| Ferramenta    | Descrição                                                                                    |
+| ------------- | -------------------------------------------------------------------------------------------- |
+| `rdap_domain` | Consulta informações de domínios .br (ex: `nic.br`, `registro.br`)                           |
+| `rdap_entity` | Consulta entidades por CNPJ, CPF ou handle (ex: `05506560000136`, `FAN`)                     |
+| `rdap_ip`     | Consulta informações de IP ou rede (ex: `200.160.0.0`, `200.160.0.0/20`)                     |
+| `rdap_asn`    | Consulta Autonomous System Numbers (ex: `22548`, `AS22548`)                                  |
+| `dns_lookup`  | Resolve registros DNS A, AAAA, CNAME, NS, MX e TXT (ex: `vivenciasazuis.com.br`, `a.dns.br`) |
+
+> A API RDAP do Registro.br não implementa o endpoint `/nameserver` (responde `501 Not Implemented`),
+> então a consulta de nameservers é feita via `dns_lookup` (tipos `NS`, `A`, `AAAA`) ou pelos
+> nameservers que já vêm na resposta de `rdap_domain`.
 
 ## Instalação
 
@@ -124,6 +128,7 @@ Após configurar, você pode fazer perguntas como:
 - "Quem é o registrante do domínio registro.br?"
 - "Busque informações do ASN 22548"
 - "Qual o IP do nameserver a.dns.br?"
+- "Quais os registros A de vivenciasazuis.com.br?"
 - "Consulte a entidade com CNPJ 05506560000136"
 
 ## Exemplo de Resposta
@@ -175,9 +180,33 @@ npm install
 npm start
 ```
 
+### Scripts
+
+| Script                 | O que faz                                                             |
+| ---------------------- | --------------------------------------------------------------------- |
+| `npm start`            | Sobe o servidor MCP no stdio                                          |
+| `npm test`             | Suíte de testes (`node:test`)                                         |
+| `npm run lint`         | ESLint                                                                |
+| `npm run lint:fix`     | ESLint com `--fix`                                                    |
+| `npm run format`       | Prettier (escreve)                                                    |
+| `npm run format:check` | Prettier (só confere)                                                 |
+| `npm run check`        | `format:check` + `lint` + `test`, exatamente o que o CI roda          |
+| `npm run smoke`        | Consulta a API RDAP e o DNS ao vivo (`npm run smoke -- outro.com.br`) |
+
+Os testes rodam **offline**: usam fixtures do RDAP e stubs de `fetch`/resolver DNS, então o CI não
+depende da API pública. A verificação contra a API real é o `npm run smoke`.
+
+### Pre-commit e CI
+
+- **pre-commit** (husky + lint-staged): roda Prettier e ESLint nos arquivos alterados e depois a suíte
+  completa de testes, bloqueando commits quebrados.
+- **CI** (GitHub Actions): em `push` na main e em pull requests, roda `format:check`, `lint` e `test`
+  numa matrix com Node 20, 22 e 24.
+
 ## Requisitos
 
-- Node.js >= 18.0.0
+- Node.js >= 18.0.0 para usar o servidor
+- Node.js >= 20.19.0 para o tooling de desenvolvimento (ESLint, lint-staged)
 
 ## Licença
 

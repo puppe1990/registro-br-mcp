@@ -5,27 +5,40 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { pathToFileURL } from "node:url";
 import { z } from "zod";
 
+import { DNS_RECORD_TYPES, DEFAULT_DNS_TYPE, resolveDns } from "./dns.js";
 import {
   fetchRdap,
   formatAsnInfo,
   formatDomainInfo,
   formatEntityInfo,
   formatIpInfo,
-  formatNameserverInfo,
 } from "./rdap.js";
 
+function rdapTool({ name, description, schema, errorLabel, path, format }) {
+  return {
+    name,
+    description,
+    schema,
+    errorLabel,
+    run: async (args) => {
+      const data = await fetchRdap(path(args));
+      return { text: format(data), data };
+    },
+  };
+}
+
 export const TOOLS = [
-  {
+  rdapTool({
     name: "rdap_domain",
     description: "Query RDAP information for a .br domain",
     schema: {
       domain: z.string().describe("The domain name to query (e.g., nic.br, registro.br)"),
     },
+    errorLabel: "domain",
     path: ({ domain }) => `/domain/${domain}`,
     format: formatDomainInfo,
-    errorLabel: "domain",
-  },
-  {
+  }),
+  rdapTool({
     name: "rdap_entity",
     description: "Query RDAP information for an entity (by CNPJ, CPF, or handle)",
     schema: {
@@ -33,21 +46,11 @@ export const TOOLS = [
         .string()
         .describe("The entity identifier (CNPJ without punctuation, CPF, or handle like 'FAN')"),
     },
+    errorLabel: "entity",
     path: ({ entity }) => `/entity/${entity}`,
     format: formatEntityInfo,
-    errorLabel: "entity",
-  },
-  {
-    name: "rdap_nameserver",
-    description: "Query RDAP information for a nameserver",
-    schema: {
-      nameserver: z.string().describe("The nameserver hostname (e.g., a.dns.br)"),
-    },
-    path: ({ nameserver }) => `/nameserver/${nameserver}`,
-    format: formatNameserverInfo,
-    errorLabel: "nameserver",
-  },
-  {
+  }),
+  rdapTool({
     name: "rdap_ip",
     description: "Query RDAP information for an IP address or network",
     schema: {
@@ -55,19 +58,33 @@ export const TOOLS = [
         .string()
         .describe("The IP address or CIDR notation (e.g., 200.160.0.0, 200.160.0.0/20)"),
     },
+    errorLabel: "IP",
     path: ({ ip }) => `/ip/${ip}`,
     format: formatIpInfo,
-    errorLabel: "IP",
-  },
-  {
+  }),
+  rdapTool({
     name: "rdap_asn",
     description: "Query RDAP information for an Autonomous System Number",
     schema: {
       asn: z.string().describe("The AS number (e.g., 22548 or AS22548)"),
     },
+    errorLabel: "ASN",
     path: ({ asn }) => `/autnum/${asn.replace(/^AS/i, "")}`,
     format: formatAsnInfo,
-    errorLabel: "ASN",
+  }),
+  {
+    name: "dns_lookup",
+    description:
+      "Resolve DNS records (A, AAAA, CNAME, NS, MX, TXT) for a hostname, including .br domains",
+    schema: {
+      name: z.string().describe("The hostname to resolve (e.g., vivenciasazuis.com.br, a.dns.br)"),
+      type: z
+        .enum(DNS_RECORD_TYPES)
+        .optional()
+        .describe(`Record type to resolve (defaults to ${DEFAULT_DNS_TYPE})`),
+    },
+    errorLabel: "DNS record",
+    run: async ({ name, type }) => ({ text: await resolveDns(name, type) }),
   },
 ];
 
@@ -80,19 +97,17 @@ export function createServer() {
   for (const tool of TOOLS) {
     server.tool(tool.name, tool.description, tool.schema, async (args) => {
       try {
-        const data = await fetchRdap(tool.path(args));
-        return {
-          content: [
-            {
-              type: "text",
-              text: tool.format(data),
-            },
-            {
-              type: "text",
-              text: "\n\n--- Raw JSON ---\n" + JSON.stringify(data, null, 2),
-            },
-          ],
-        };
+        const { text, data } = await tool.run(args);
+        const content = [{ type: "text", text }];
+
+        if (data !== undefined) {
+          content.push({
+            type: "text",
+            text: "\n\n--- Raw JSON ---\n" + JSON.stringify(data, null, 2),
+          });
+        }
+
+        return { content };
       } catch (error) {
         return {
           content: [
