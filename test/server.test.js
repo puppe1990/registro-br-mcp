@@ -13,9 +13,9 @@ const serverPath = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "i
 const EXPECTED_TOOLS = [
   ["rdap_domain", "domain"],
   ["rdap_entity", "entity"],
-  ["rdap_nameserver", "nameserver"],
   ["rdap_ip", "ip"],
   ["rdap_asn", "asn"],
+  ["dns_lookup", "name"],
 ];
 
 function startServer() {

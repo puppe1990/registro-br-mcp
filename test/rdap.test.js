@@ -11,7 +11,6 @@ import {
   formatDomainInfo,
   formatEntityInfo,
   formatIpInfo,
-  formatNameserverInfo,
 } from "../src/rdap.js";
 
 const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
@@ -88,19 +87,6 @@ test("formatEntityInfo renders the entity record", () => {
 
 test("formatEntityInfo skips absent vcard, roles and public ids", () => {
   assert.equal(formatEntityInfo({ handle: "FAN" }), "Handle: FAN");
-});
-
-test("formatNameserverInfo renders addresses and falls back to N/A handle", () => {
-  const output = formatNameserverInfo(fixture("nameserver"));
-
-  assert.match(output, /^Nameserver: a\.dns\.br$/m);
-  assert.match(output, /^Handle: A\.DNS\.BR$/m);
-  assert.match(output, /^IPv4: 200\.160\.0\.0$/m);
-  assert.match(output, /^IPv6: 2001:12f8::0$/m);
-  assert.match(output, /^ {2}- registration: 2002-05-03T12:00:00Z$/m);
-
-  const bare = formatNameserverInfo({ ldhName: "b.dns.br" });
-  assert.equal(bare, "Nameserver: b.dns.br\nHandle: N/A");
 });
 
 test("formatIpInfo renders the network record", () => {
