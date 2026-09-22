@@ -1,0 +1,17 @@
+{
+  "objectClassName": "entity",
+  "handle": "05506560000136",
+  "roles": ["registrant"],
+  "vcardArray": [
+    "vcard",
+    [
+      ["version", {}, "text", "4.0"],
+      ["fn", {}, "text", "Núcleo de Inf. e Coord. do Ponto BR - NIC.BR"],
+      ["kind", {}, "text", "org"],
+      ["email", {}, "text", "registro@nic.br"]
+    ]
+  ],
+  "publicIds": [{ "type": "CNPJ", "identifier": "05.506.560/0001-36" }],
+  "events": [{ "eventAction": "registration", "eventDate": "1997-07-11T12:00:00Z" }],
+  "legalRepresentative": "Frederico Augusto de Carvalho Neves"
+}

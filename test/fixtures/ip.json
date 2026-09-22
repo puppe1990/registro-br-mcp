@@ -1,0 +1,16 @@
+{
+  "objectClassName": "ip network",
+  "handle": "200.160.0.0/20",
+  "startAddress": "200.160.0.0",
+  "endAddress": "200.160.15.255",
+  "ipVersion": "v4",
+  "name": "NICBR-NET-1",
+  "type": "ALLOCATION",
+  "country": "BR",
+  "parentHandle": "200.128.0.0/9",
+  "status": ["active"],
+  "events": [
+    { "eventAction": "registration", "eventDate": "2002-06-28T12:00:00Z" },
+    { "eventAction": "last changed", "eventDate": "2018-03-27T20:09:08Z" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "objectClassName": "nameserver",
+  "handle": "A.DNS.BR",
+  "ldhName": "a.dns.br",
+  "status": ["active"],
+  "ipAddresses": {
+    "v4": ["200.160.0.0"],
+    "v6": ["2001:12f8::0"]
+  },
+  "events": [{ "eventAction": "registration", "eventDate": "2002-05-03T12:00:00Z" }]
+}
