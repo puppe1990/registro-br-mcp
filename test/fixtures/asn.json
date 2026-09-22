@@ -1,0 +1,11 @@
+{
+  "objectClassName": "autnum",
+  "handle": "22548",
+  "startAutnum": 22548,
+  "endAutnum": 22548,
+  "name": "Núcleo de Inf. e Coord. do Ponto BR - NIC.BR",
+  "type": "DIRECT ALLOCATION",
+  "country": "BR",
+  "status": ["active"],
+  "events": [{ "eventAction": "registration", "eventDate": "2002-07-17T12:00:00Z" }]
+}

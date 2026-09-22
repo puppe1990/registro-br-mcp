@@ -1,0 +1,44 @@
+{
+  "objectClassName": "domain",
+  "handle": "vivenciasazuis.com.br",
+  "ldhName": "vivenciasazuis.com.br",
+  "status": ["active"],
+  "events": [
+    { "eventAction": "registration", "eventDate": "2024-03-12T12:00:00Z" },
+    { "eventAction": "last changed", "eventDate": "2026-09-21T18:33:00Z" }
+  ],
+  "nameservers": [
+    { "objectClassName": "nameserver", "handle": "e.sec.dns.br", "ldhName": "e.sec.dns.br" },
+    { "objectClassName": "nameserver", "handle": "f.sec.dns.br", "ldhName": "f.sec.dns.br" }
+  ],
+  "secureDNS": {
+    "delegationSigned": true,
+    "dsData": [{ "keyTag": 47828, "algorithm": 13, "digestType": 2 }]
+  },
+  "entities": [
+    {
+      "objectClassName": "entity",
+      "handle": "PUP-COM",
+      "roles": ["registrant"],
+      "vcardArray": [
+        "vcard",
+        [
+          ["version", {}, "text", "4.0"],
+          ["fn", {}, "text", "Vivencias Azuis"]
+        ]
+      ]
+    },
+    {
+      "objectClassName": "entity",
+      "handle": "MPUPPE",
+      "roles": ["administrative", "technical"],
+      "vcardArray": [
+        "vcard",
+        [
+          ["version", {}, "text", "4.0"],
+          ["fn", {}, "text", "Matheus Puppe"]
+        ]
+      ]
+    }
+  ]
+}

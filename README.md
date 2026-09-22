@@ -4,13 +4,13 @@ Um servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) par
 
 ## Ferramentas Disponíveis
 
-| Ferramenta | Descrição |
-|------------|-----------|
-| `rdap_domain` | Consulta informações de domínios .br (ex: `nic.br`, `registro.br`) |
-| `rdap_entity` | Consulta entidades por CNPJ, CPF ou handle (ex: `05506560000136`, `FAN`) |
-| `rdap_nameserver` | Consulta informações de nameservers (ex: `a.dns.br`) |
-| `rdap_ip` | Consulta informações de IP ou rede (ex: `200.160.0.0`, `200.160.0.0/20`) |
-| `rdap_asn` | Consulta Autonomous System Numbers (ex: `22548`, `AS22548`) |
+| Ferramenta        | Descrição                                                                |
+| ----------------- | ------------------------------------------------------------------------ |
+| `rdap_domain`     | Consulta informações de domínios .br (ex: `nic.br`, `registro.br`)       |
+| `rdap_entity`     | Consulta entidades por CNPJ, CPF ou handle (ex: `05506560000136`, `FAN`) |
+| `rdap_nameserver` | Consulta informações de nameservers (ex: `a.dns.br`)                     |
+| `rdap_ip`         | Consulta informações de IP ou rede (ex: `200.160.0.0`, `200.160.0.0/20`) |
+| `rdap_asn`        | Consulta Autonomous System Numbers (ex: `22548`, `AS22548`)              |
 
 ## Instalação
 
